@@ -11,7 +11,7 @@ public class ChangePhoto : MonoBehaviour
     public void Start()
     {
         frames = new Texture[100];
-        Object[] textures = Resources.LoadAll("AwesomeImages/DesiredImages", typeof(Texture2D));
+        Object[] textures = Resources.LoadAll("Images", typeof(Texture2D));
 
         for (int i = 0; i < textures.Length; i++)
         {
@@ -53,6 +53,7 @@ public class ChangePhoto : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 Ri.texture = frames[0];
+                Ri.GetComponent<AspectRatioFitter>().aspectRatio = Ri.texture.width / Ri.texture.height;
             }
 
             // if mouse button right
