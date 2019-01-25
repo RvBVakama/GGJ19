@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class ChangePhoto : MonoBehaviour
 {
     public Texture[] frames;
+    public AudioClip[] sfxChimes;
+    public AudioSource audSource;
 
     public void Awake()
     {
@@ -17,6 +19,7 @@ public class ChangePhoto : MonoBehaviour
         {
             frames[i] = (Texture)textures[i];
         }
+
     }
 
     // Update is called once per frame
@@ -57,6 +60,7 @@ public class ChangePhoto : MonoBehaviour
                     nImgChoice = 0;
                 Ri.texture = frames[nImgChoice];
                 Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
+                PlayChime(hit);
             }
 
             // if mouse button right
@@ -69,9 +73,17 @@ public class ChangePhoto : MonoBehaviour
 
                 Ri.texture = frames[nImgChoice];
                 Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
+                PlayChime(hit);
             }
         }
 
+    }
+
+    public void PlayChime(RaycastHit hit)
+    {
+        int rdm = Random.Range(0, sfxChimes.Length);
+        //audSource.transform.SetPositionAndRotation(hit.transform.position, hit.transform.rotation);
+        audSource.PlayOneShot(sfxChimes[rdm]);
     }
 }
 
