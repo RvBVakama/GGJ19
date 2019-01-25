@@ -6,29 +6,24 @@ ModelImporter:
     100000: Circle.001
     100002: Cube
     100004: Cube.001
-    100006: Cube.002
-    100008: //RootNode
+    100006: //RootNode
     400000: Circle.001
     400002: Cube
     400004: Cube.001
-    400006: Cube.002
-    400008: //RootNode
-    2100000: Material.001
-    2100002: Material.003
-    2100004: Material.002
-    2100006: No Name
+    400006: //RootNode
+    2100000: Material.003
+    2100002: Material.002
+    2100004: No Name
+    2100006: Material.001
     2300000: Circle.001
     2300002: Cube
     2300004: Cube.001
-    2300006: Cube.002
     3300000: Circle.001
     3300002: Cube
     3300004: Cube.001
-    3300006: Cube.002
-    4300000: Cube.002
-    4300002: Circle.001
-    4300004: Cube.001
-    4300006: Cube
+    4300000: Circle.001
+    4300002: Cube.001
+    4300004: Cube
   externalObjects: {}
   materials:
     importMaterials: 1
