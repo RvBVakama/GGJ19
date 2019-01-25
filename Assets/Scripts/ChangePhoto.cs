@@ -8,17 +8,6 @@ public class ChangePhoto : MonoBehaviour
 {
     public Texture[] frames;
 
-    public string url = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg";
-    public void Img()
-    {
-        using (WWW www = new WWW(url))
-        {
-            if (www.isDone)
-                System.IO.File.WriteAllBytes(@"L:\rwr\bababal.jpg", www.bytes);
-        }
-    }
-
-
     public void Awake()
     {
         Object[] textures = Resources.LoadAll("Images/Stupendious", typeof(Texture2D));
@@ -34,7 +23,6 @@ public class ChangePhoto : MonoBehaviour
     void Update()
     {
         CyclePhoto();
-        Img();
     }
 
     public void CyclePhoto()
