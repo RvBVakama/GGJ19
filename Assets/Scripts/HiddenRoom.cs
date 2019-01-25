@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class HiddenRoom : MonoBehaviour
 {
-    public GameObject goTrapdoor = null;
+    public static GameObject goTrapdoor = null;
 
     private KeyCode[] konamiCode = { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.Return };
+    private void Start()
+    {
+        goTrapdoor = transform.GetChild(0).gameObject;
+    }
 
     // Update is called once per frame
     void Update()
@@ -14,7 +18,7 @@ public class HiddenRoom : MonoBehaviour
         KonamiCode();
     }
 
-    int nKonamiCodeProgress = 0;
+    public static int nKonamiCodeProgress = 0;
 
     private void KonamiCode()
     {
@@ -22,28 +26,17 @@ public class HiddenRoom : MonoBehaviour
         if (nKonamiCodeProgress > konamiCode.Length - 1)
         {
             Debug.Log("correct!");
-            goTrapdoor.transform.GetComponent<BoxCollider>().enabled = false;
+            goTrapdoor.transform.gameObject.SetActive(false);
             nKonamiCodeProgress = 0;
             return;
         }
 
-        if (Input.anyKeyDown)
+        // if the correct input is entered
+        if (Input.GetKeyUp(konamiCode[nKonamiCodeProgress]))
         {
-            // if the correct input is entered
-            if (Input.GetKeyUp(konamiCode[nKonamiCodeProgress]))
-            {
-                // got one right so progress
-                ++nKonamiCodeProgress;
-                Debug.Log(nKonamiCodeProgress);
-            }
-            // got a sequence wrong back to the start
-            else if (!Input.GetKeyUp(konamiCode[nKonamiCodeProgress]))
-            {
-                Debug.Log("wrong");
-            }
+            // got one right so progress
+            ++nKonamiCodeProgress;
+            Debug.Log(nKonamiCodeProgress);
         }
-	// got a sequence wrong back to the start
-        //else if (Input.anyKeyUp)
-        //    nKonamiCodeProgress = 0;
     }
 }
