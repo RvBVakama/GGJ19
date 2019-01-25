@@ -42,5 +42,8 @@ public class HiddenRoom : MonoBehaviour
                 Debug.Log("wrong");
             }
         }
+	// got a sequence wrong back to the start
+        //else if (Input.anyKeyUp)
+        //    nKonamiCodeProgress = 0;
     }
 }
