@@ -8,10 +8,21 @@ public class ChangePhoto : MonoBehaviour
 {
     public Texture[] frames;
 
-    public void Start()
+    public string url = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg";
+    public void Img()
     {
-        frames = new Texture[100];
-        Object[] textures = Resources.LoadAll("Images", typeof(Texture2D));
+        using (WWW www = new WWW(url))
+        {
+            if (www.isDone)
+                System.IO.File.WriteAllBytes(@"L:\rwr\bababal.jpg", www.bytes);
+        }
+    }
+
+
+    public void Awake()
+    {
+        Object[] textures = Resources.LoadAll("Images/Stupendious", typeof(Texture2D));
+        frames = new Texture[textures.Length];
 
         for (int i = 0; i < textures.Length; i++)
         {
@@ -23,6 +34,7 @@ public class ChangePhoto : MonoBehaviour
     void Update()
     {
         CyclePhoto();
+        Img();
     }
 
     public void CyclePhoto()
@@ -39,9 +51,9 @@ public class ChangePhoto : MonoBehaviour
                 Cycle(hit);
             }
         }
-        //RawImage ri;
-        //ri.mainTexture.width
     }
+
+    int nImgChoice = 0;
 
     public void Cycle(RaycastHit hit)
     {
@@ -52,16 +64,26 @@ public class ChangePhoto : MonoBehaviour
             // if mouse button left
             if (Input.GetMouseButtonDown(0))
             {
-                Ri.texture = frames[0];
-                Ri.GetComponent<AspectRatioFitter>().aspectRatio = Ri.texture.width / Ri.texture.height;
+                ++nImgChoice;
+                if (nImgChoice > frames.Length - 1)
+                    nImgChoice = 0;
+                Ri.texture = frames[nImgChoice];
+                Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
             }
 
             // if mouse button right
             if (Input.GetMouseButtonDown(1))
             {
+                --nImgChoice;
+                // cycle back to the top of the 
+                if (nImgChoice < 0)
+                    nImgChoice = frames.Length - 1;
 
+                Ri.texture = frames[nImgChoice];
+                Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
             }
         }
+
     }
 }
 
