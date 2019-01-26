@@ -72,7 +72,7 @@ public class Manager : MonoBehaviour
     }
 
     float fCount = 0.0f;
-    float fFlyTime = 5.0f;
+    float fFlyTime = 1.0f;
 
     private void FlyToPlayer()
     {
