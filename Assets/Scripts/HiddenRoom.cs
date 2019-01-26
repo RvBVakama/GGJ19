@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HiddenRoom : MonoBehaviour
 {
     public static GameObject goTrapdoor = null;
+    public GameObject pictureStorage = null;
+    public AudioClip audDoorOpen = null;
+    public AudioSource audSrcPlayer = null;
+
 
     private KeyCode[] konamiCode = { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.Return };
     private void Start()
@@ -28,6 +33,8 @@ public class HiddenRoom : MonoBehaviour
             Debug.Log("correct!");
             goTrapdoor.transform.gameObject.SetActive(false);
             nKonamiCodeProgress = 0;
+            audSrcPlayer.PlayOneShot(audDoorOpen);
+            AddRbToPics();
             return;
         }
 
@@ -37,6 +44,16 @@ public class HiddenRoom : MonoBehaviour
             // got one right so progress
             ++nKonamiCodeProgress;
             Debug.Log(nKonamiCodeProgress);
+        }
+    }
+
+    private void AddRbToPics()
+    {
+        RawImage[] goArr = pictureStorage.transform.GetComponentsInChildren<RawImage>();
+
+        foreach (RawImage go in goArr)
+        {
+            go.gameObject.AddComponent<Rigidbody>();
         }
     }
 }
