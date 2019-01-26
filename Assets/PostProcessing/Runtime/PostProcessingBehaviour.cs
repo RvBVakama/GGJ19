@@ -123,7 +123,7 @@ namespace UnityEngine.PostProcessing
             m_Taa.Init(context, profile.antialiasing);
             m_EyeAdaptation.Init(context, profile.eyeAdaptation);
             m_DepthOfField.Init(context, profile.depthOfField);
-            m_Bloom.Init(context, profile.bloom);
+            m_Bloom.Init(context, profile.DepthofField);
             m_ChromaticAberration.Init(context, profile.chromaticAberration);
             m_ColorGrading.Init(context, profile.colorGrading);
             m_UserLut.Init(context, profile.userLut);

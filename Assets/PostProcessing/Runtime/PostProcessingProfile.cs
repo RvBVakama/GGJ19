@@ -14,7 +14,7 @@ namespace UnityEngine.PostProcessing
         public DepthOfFieldModel depthOfField = new DepthOfFieldModel();
         public MotionBlurModel motionBlur = new MotionBlurModel();
         public EyeAdaptationModel eyeAdaptation = new EyeAdaptationModel();
-        public BloomModel bloom = new BloomModel();
+        public BloomModel DepthofField = new BloomModel();
         public ColorGradingModel colorGrading = new ColorGradingModel();
         public UserLutModel userLut = new UserLutModel();
         public ChromaticAberrationModel chromaticAberration = new ChromaticAberrationModel();

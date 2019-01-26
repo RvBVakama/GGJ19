@@ -72,8 +72,8 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       focusDistance: 0.1
-      aperture: 0.1
-      focalLength: 300
+      aperture: 32
+      focalLength: 22
       useCameraFov: 0
       kernelSize: 1
   motionBlur:
@@ -96,7 +96,7 @@ MonoBehaviour:
       speedDown: 1
       logMin: -8
       logMax: 4
-  bloom:
+  DepthofField:
     m_Enabled: 0
     m_Settings:
       bloom:

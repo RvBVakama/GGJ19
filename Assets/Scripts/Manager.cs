@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BansheeGz.BGSpline.Components;
+using UnityEngine.PostProcessing;
 
 public class Manager : MonoBehaviour
 {
     public UnityStandardAssets.Characters.FirstPerson.RigidbodyFirstPersonController rbfpc;
+    public PostProcessingProfile ppp = null;
+
     public Camera camMain = null;
+    public Camera camLerp = null;
+    public Camera camMenu = null;
+
     public Canvas canMenu = null;
     public Canvas canEditUI = null;
     public BGCcTrs trs = null;
@@ -18,12 +24,15 @@ public class Manager : MonoBehaviour
     private Vector3 v3StartPos;
     private Vector3 v3StartRot;
 
-    private Vector3 v3EndPos = new Vector3(0.0f, 0.6f, 0.0f);
-    private Vector3 v3EndRot = new Vector3(0.0f, 0.0f, 0.0f);
+    private Vector3 v3EndPos;
+    private Vector3 v3EndRot;
+
+    DepthOfFieldModel.Settings dof;
 
 
     private void Start()
     {
+        dof = ppp.depthOfField.settings;
         rbfpc.enabled = false;
         sbPaused = true;
     }
@@ -51,8 +60,14 @@ public class Manager : MonoBehaviour
 
         bFlyToPlayer = true;
 
-        v3StartPos = camMain.transform.position;
-        v3StartRot = camMain.transform.eulerAngles;
+        v3StartPos = camMenu.transform.localPosition;
+        v3StartRot = camMenu.transform.localEulerAngles;
+
+        v3EndPos = camMain.transform.position;
+        v3EndRot = camMain.transform.eulerAngles;
+
+        camMenu.gameObject.SetActive(false);
+        camLerp.gameObject.SetActive(true);
     }
 
     float fCount = 0.0f;
@@ -64,13 +79,21 @@ public class Manager : MonoBehaviour
             if (fCount < fFlyTime)
             {
                 fCount += Time.deltaTime;
-                camMain.transform.position = Vector3.Lerp(v3StartPos, v3EndPos, fCount / fFlyTime);
-                camMain.transform.eulerAngles = new Vector3(v3EndRot.x, v3EndRot.y, v3EndRot.z);
+
+                // reduce dof over time
+                dof.focalLength = Mathf.Lerp(22.0f, 14.0f, fCount / fFlyTime);
+                ppp.depthOfField.settings = dof;
+
+                camLerp.transform.localPosition = Vector3.Lerp(v3StartPos, v3EndPos, fCount / fFlyTime);
+                //camMain.transform.eulerAngles = Vector3.Lerp(v3StartRot, v3EndRot, fCount / fFlyTime);
+                camLerp.transform.localEulerAngles = new Vector3(Mathf.LerpAngle(v3StartRot.x, v3EndRot.x, fCount / fFlyTime), Mathf.LerpAngle(v3StartRot.y, v3EndRot.y, fCount / fFlyTime), Mathf.LerpAngle(v3StartRot.z, v3EndRot.z, fCount / fFlyTime));
             }
             else
             {
                 fCount = 0.0f;
-                camMain.transform.position = v3EndPos;
+
+                camLerp.gameObject.SetActive(false);
+                camMain.gameObject.SetActive(true);
 
                 rbfpc.enabled = true;
                 sbPaused = false;
@@ -82,8 +105,6 @@ public class Manager : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            sbPaused = !sbPaused;
-
             if (!sbPaused)
             {
                 // turn off the menu objects
@@ -97,11 +118,13 @@ public class Manager : MonoBehaviour
                 canEditUI.gameObject.SetActive(false);
 
                 // Unassign the camera from the trs component
-                trs.ObjectToManipulate = camMain.transform;
+                //trs.ObjectToManipulate = camMain.transform;
 
                 rbfpc.enabled = false;
                 sbPaused = true;
             }
+
+            sbPaused = !sbPaused;
         }
     }
 
