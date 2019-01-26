@@ -9,6 +9,7 @@ public class MenuCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(target.transform.position);
+        if (Manager.sbPaused)
+            transform.LookAt(target.transform.position);
     }
 }
