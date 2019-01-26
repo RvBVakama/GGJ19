@@ -57,18 +57,17 @@ public class ChangePhoto : MonoBehaviour
             // if mouse button left
             if (Input.GetMouseButtonDown(0))
             {
-                ++nImgChoice;
                 if (nImgChoice > frames.Length - 1)
                     nImgChoice = 0;
                 Ri.texture = frames[nImgChoice];
                 Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
                 PlayChime(hit);
+                ++nImgChoice;
             }
 
             // if mouse button right
             if (Input.GetMouseButtonDown(1))
             {
-                --nImgChoice;
                 // cycle back to the top of the 
                 if (nImgChoice < 0)
                     nImgChoice = frames.Length - 1;
@@ -76,6 +75,7 @@ public class ChangePhoto : MonoBehaviour
                 Ri.texture = frames[nImgChoice];
                 Ri.GetComponent<AspectRatioFitter>().aspectRatio = (float)Ri.texture.width / (float)Ri.texture.height;
                 PlayChime(hit);
+                --nImgChoice;
             }
         }
 

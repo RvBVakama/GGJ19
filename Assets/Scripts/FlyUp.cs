@@ -10,10 +10,7 @@ public class FlyUp : MonoBehaviour
     {
         // close the trap door again
         col.GetComponent<Rigidbody>().AddForce(Vector3.up  * 185, ForceMode.Impulse);
-    }
 
-    private void FunctionForMitch()
-    {
-        playerGO.GetComponentInChildren<Rigidbody>();
+        Manager.bSandEnter = true;
     }
 }
