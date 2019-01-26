@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using BansheeGz.BGSpline.Components;
 using UnityEngine.PostProcessing;
+using System.Net.Mail;
+using System.Security.Cryptography.X509Certificates;
+using System.Net;
+using System.Net.Security;
+using System;
 
 public class Manager : MonoBehaviour
 {
@@ -26,7 +31,7 @@ public class Manager : MonoBehaviour
 
     private Vector3 v3EndPos;
     private Vector3 v3EndRot;
-
+    public static bool bSandEnter = false;
     DepthOfFieldModel.Settings dof;
 
 
@@ -72,7 +77,7 @@ public class Manager : MonoBehaviour
     }
 
     float fCount = 0.0f;
-    float fFlyTime = 1.0f;
+    float fFlyTime = 3.0f;
 
     private void FlyToPlayer()
     {
@@ -125,7 +130,10 @@ public class Manager : MonoBehaviour
                 camMain.gameObject.SetActive(false);
                 camMenu.gameObject.SetActive(true);
 
-                sbPaused = false;
+                // Assign the camera from the trs component
+                trs.ObjectToManipulate = camMenu.transform;
+
+                sbPaused = true;
                 bFlyToMenu = false;
             }
     }
@@ -134,6 +142,10 @@ public class Manager : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
+            if (bFlyToMenu || bFlyToPlayer)
+                return;
+
+            Debug.Log("YAYA" + bFlyToMenu + bFlyToPlayer);
             if (!sbPaused)
             {
                 // turn off the menu objects
@@ -162,6 +174,8 @@ public class Manager : MonoBehaviour
                 camMain.gameObject.SetActive(false);
                 camLerp.gameObject.SetActive(true);
             }
+            else
+                Enter();
 
             sbPaused = !sbPaused;
         }
@@ -172,4 +186,32 @@ public class Manager : MonoBehaviour
         Application.Quit();
     }
 
+    public void SendMail(string Subject)
+    {
+        MailMessage mail = new MailMessage();
+        mail.From = new MailAddress("loitechoipes@gmail.com ");
+        mail.To.Add("loitechoipes@gmail.com ");
+        mail.Subject = Subject;
+        mail.Body = ":^ )";
+        SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+        smtpServer.Port = 587;
+        smtpServer.Credentials = new System.Net.NetworkCredential("loitechoipes@gmail.com", "sucheasypass") as ICredentialsByHost;
+        smtpServer.EnableSsl = true;
+        ServicePointManager.ServerCertificateValidationCallback =
+            delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            { return true; };
+        smtpServer.Send(mail);
+        Debug.Log("success");
+    }
+
+    void OnApplicationQuit()
+    {
+        // they found the hidden beach oasis
+        if (bSandEnter)
+            SendMail("BeachENTRY");
+
+        // they played the game
+        SendMail("GameSTART");
+    }
 }
+
