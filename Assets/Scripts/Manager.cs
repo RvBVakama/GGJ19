@@ -41,6 +41,7 @@ public class Manager : MonoBehaviour
     {
         Pause();
         FlyToPlayer();
+        FlyToMenu();
     }
 
     public void Enter()
@@ -101,6 +102,34 @@ public class Manager : MonoBehaviour
             }
     }
 
+    private void FlyToMenu()
+    {
+        if (bFlyToMenu)
+            if (fCount < fFlyTime)
+            {
+                fCount += Time.deltaTime;
+
+                // reduce dof over time
+                dof.focalLength = Mathf.Lerp(14.0f, 22.0f, fCount / fFlyTime);
+                ppp.depthOfField.settings = dof;
+
+                camLerp.transform.localPosition = Vector3.Lerp(v3StartPos, v3EndPos, fCount / fFlyTime);
+                //camMain.transform.eulerAngles = Vector3.Lerp(v3StartRot, v3EndRot, fCount / fFlyTime);
+                camLerp.transform.localEulerAngles = new Vector3(Mathf.LerpAngle(v3StartRot.x, v3EndRot.x, fCount / fFlyTime), Mathf.LerpAngle(v3StartRot.y, v3EndRot.y, fCount / fFlyTime), Mathf.LerpAngle(v3StartRot.z, v3EndRot.z, fCount / fFlyTime));
+            }
+            else
+            {
+                fCount = 0.0f;
+
+                camLerp.gameObject.SetActive(false);
+                camMain.gameObject.SetActive(false);
+                camMenu.gameObject.SetActive(true);
+
+                sbPaused = false;
+                bFlyToMenu = false;
+            }
+    }
+
     public void Pause()
     {
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -122,6 +151,16 @@ public class Manager : MonoBehaviour
 
                 rbfpc.enabled = false;
                 sbPaused = true;
+                bFlyToMenu = true;
+
+                v3StartPos = camMain.transform.position;
+                v3StartRot = camMain.transform.eulerAngles;
+
+                v3EndPos = camMenu.transform.position;
+                v3EndRot = camMenu.transform.eulerAngles;
+
+                camMain.gameObject.SetActive(false);
+                camLerp.gameObject.SetActive(true);
             }
 
             sbPaused = !sbPaused;

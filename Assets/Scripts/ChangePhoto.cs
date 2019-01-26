@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ChangePhoto : MonoBehaviour
 {
+    public Camera camMain = null;
     public Texture[] frames;
     public AudioClip[] sfxChimes;
     public AudioSource audSource;
@@ -33,12 +34,14 @@ public class ChangePhoto : MonoBehaviour
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
-
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (camMain.gameObject.activeInHierarchy)
             {
-                Cycle(hit);
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    Cycle(hit);
+                }
             }
         }
     }
