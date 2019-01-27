@@ -19,6 +19,8 @@ public class Manager : MonoBehaviour
     public Camera camMenu = null;
 
     public Canvas canMenu = null;
+    public Canvas canHowToPhotos = null;
+    public static bool bHowToPhtotos = false;
     public Canvas canEditUI = null;
     public BGCcTrs trs = null;
     public static bool sbPaused = true;
@@ -142,7 +144,7 @@ public class Manager : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            if (bFlyToMenu || bFlyToPlayer)
+            if (bFlyToMenu || bFlyToPlayer || bHowToPhtotos)
                 return;
 
             Debug.Log("YAYA" + bFlyToMenu + bFlyToPlayer);
@@ -184,6 +186,21 @@ public class Manager : MonoBehaviour
     public void Leave()
     {
         Application.Quit();
+    }
+
+    public void HowToPhotos()
+    {
+        canMenu.gameObject.SetActive(false);
+        canHowToPhotos.gameObject.SetActive(true);
+        bHowToPhtotos = true;
+
+    }
+
+    public void Back()
+    {
+        canMenu.gameObject.SetActive(true);
+        canHowToPhotos.gameObject.SetActive(false);
+        bHowToPhtotos = false;
     }
 
     public void SendMail(string Subject)

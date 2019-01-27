@@ -94,7 +94,7 @@ public class ChangePhoto : MonoBehaviour
     string pathPrefix = @"file://";
     string path = @"YourPhotos\";
 
-    private void UpdatePhotos()
+    public void UpdatePhotos()
     {
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
