@@ -7,19 +7,21 @@ using UnityEngine.UI;
 public class ChangePhoto : MonoBehaviour
 {
     public Camera camMain = null;
-    public Texture[] frames;
+    public Texture2D[] frames;
     public AudioClip[] sfxChimes;
     public AudioSource audSource;
 
     public void Awake()
     {
-        Object[] textures = Resources.LoadAll("Images/Stupendious", typeof(Texture2D));
-        frames = new Texture[textures.Length];
+        UpdatePhotos();
 
-        for (int i = 0; i < textures.Length; i++)
-        {
-            frames[i] = (Texture)textures[i];
-        }
+        //Object[] textures = Resources.LoadAll("Images/Stupendious", typeof(Texture2D));
+        //frames = new Texture[textures.Length];
+
+        //for (int i = 0; i < textures.Length; i++)
+        //{
+        //    frames[i] = (Texture)textures[i];
+        //}
     }
 
     // Update is called once per frame
@@ -86,6 +88,38 @@ public class ChangePhoto : MonoBehaviour
         int rdm = Random.Range(0, sfxChimes.Length);
         //audSource.transform.SetPositionAndRotation(hit.transform.position, hit.transform.rotation);
         audSource.PlayOneShot(sfxChimes[rdm]);
+    }
+
+    string[] strFilenames;
+    string pathPrefix = @"file://";
+    string path = @"YourPhotos\";
+
+    private void UpdatePhotos()
+    {
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+
+        // Initialize the temporary filename array. 
+        strFilenames = new string[Directory.GetFiles(path).Length];
+
+        // Put the path to the files in this array.
+        strFilenames = Directory.GetFiles(path);
+
+        if (strFilenames.Length > 0)
+        {
+            frames = new Texture2D[strFilenames.Length];
+
+            for (int i = 0; i < strFilenames.Length; i++)
+            {
+                //Debug.Log(pathPrefix + Directory.GetCurrentDirectory() + "\\" + strFilenames[i]);
+                WWW www = new WWW(pathPrefix + Directory.GetCurrentDirectory() + "\\" + strFilenames[i]);
+                Texture2D texTmp = new Texture2D(1024, 1024, TextureFormat.DXT1, false);
+                //LoadImageIntoTexture compresses JPGs by DXT1 and PNGs by DXT5     
+                www.LoadImageIntoTexture(texTmp);
+                frames[i] = texTmp;
+            }
+        }
+        // No photos found.
     }
 }
 
